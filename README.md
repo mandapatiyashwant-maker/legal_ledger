@@ -1,7 +1,7 @@
-# legal_ledger
+# Legal_ledger
 3D ULPIN Legal Ledger &amp; Property Rights Management System —  backend for managing parties, spatial units, BAUnits, RRRs, source documents, mutations, ownership history, audit trails, and legal property summaries.
 
-# Group 4 — Legal Record & Property Rights Management
+# Legal Record & Property Rights Management
 
 Group 4 is the legal-record backend for **SIH26011: 3D ULPIN Generation and Vertical Property Mapping System**.
 
