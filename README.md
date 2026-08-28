@@ -11,7 +11,7 @@ The main purpose of Group 4 is to answer:
 
 > **"Who has what legal right over this 3D property?"**
 
-## What Group 4 manages
+## What Legal Ledger manages
 
 - Party records
 - 3D Spatial Unit records
