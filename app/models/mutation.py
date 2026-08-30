@@ -1,11 +1,17 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from datetime import datetime
+
 from app.database import Base
 
 
 class Mutation(Base):
     __tablename__ = "mutations"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
 
     baunit_id = Column(
         Integer,
@@ -31,10 +37,11 @@ class Mutation(Base):
         nullable=True
     )
 
+    # Mutation workflow state
     state = Column(
         String,
         nullable=False,
-        default="SUBMITTED"
+        default="DRAFT"
     )
 
     reason = Column(
@@ -45,4 +52,22 @@ class Mutation(Base):
     rejection_reason = Column(
         String,
         nullable=True
+    )
+
+    # Legal validity period
+    valid_from = Column(
+        DateTime,
+        nullable=True
+    )
+
+    valid_to = Column(
+        DateTime,
+        nullable=True
+    )
+
+    # When the mutation was recorded by the system
+    recorded_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False
     )

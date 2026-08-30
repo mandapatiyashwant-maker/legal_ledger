@@ -19,11 +19,23 @@ RRRType = Literal[
 ]
 
 
+RRRStatus = Literal[
+    "ACTIVE",
+    "EXPIRED",
+    "CANCELLED",
+    "PENDING"
+]
+
+
 class RRRCreate(BaseModel):
+
     party_id: int
+
     spatial_unit_id: int
 
     rrr_type: RRRType
+
+    subtype: str | None = None
 
     share: int | None = Field(
         default=None,
@@ -32,27 +44,49 @@ class RRRCreate(BaseModel):
     )
 
     start_date: date | None = None
+
     end_date: date | None = None
 
-    status: Literal[
-        "ACTIVE",
-        "EXPIRED",
-        "CANCELLED",
-        "PENDING"
-    ] = "ACTIVE"
+    source_document_id: int | None = None
+
+    status: RRRStatus = "ACTIVE"
+
+    priority: int | None = Field(
+        default=None,
+        ge=0
+    )
+
+    notes: str | None = None
 
     description: str | None = None
 
 
 class RRRResponse(BaseModel):
+
     id: int
+
     party_id: int
+
     spatial_unit_id: int
+
     rrr_type: RRRType
+
+    subtype: str | None
+
     share: int | None
+
     start_date: date | None
+
     end_date: date | None
-    status: str
+
+    source_document_id: int | None
+
+    status: RRRStatus
+
+    priority: int | None
+
+    notes: str | None
+
     description: str | None
 
     class Config:

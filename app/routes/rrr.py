@@ -29,6 +29,10 @@ def create_rrr(
     db: Session = Depends(get_db)
 ):
 
+    # --------------------------------------------------
+    # Validate Party
+    # --------------------------------------------------
+
     party = db.query(Party).filter(
         Party.id == rrr.party_id
     ).first()
@@ -38,6 +42,11 @@ def create_rrr(
             status_code=404,
             detail="Party not found"
         )
+
+
+    # --------------------------------------------------
+    # Validate Spatial Unit
+    # --------------------------------------------------
 
     spatial_unit = db.query(SpatialUnit).filter(
         SpatialUnit.id == rrr.spatial_unit_id
@@ -49,16 +58,52 @@ def create_rrr(
             detail="Spatial unit not found"
         )
 
+
+    # --------------------------------------------------
+    # Validate Source Document
+    # --------------------------------------------------
+
+    if rrr.source_document_id is not None:
+
+        from app.models.document import Document
+
+        document = db.query(Document).filter(
+            Document.id == rrr.source_document_id
+        ).first()
+
+        if not document:
+            raise HTTPException(
+                status_code=404,
+                detail="Source document not found"
+            )
+
+
+    # --------------------------------------------------
+    # Create RRR
+    # --------------------------------------------------
+
     new_rrr = RRR(
         party_id=rrr.party_id,
         spatial_unit_id=rrr.spatial_unit_id,
+
         rrr_type=rrr.rrr_type,
+        subtype=rrr.subtype,
+
         share=rrr.share,
+
         start_date=rrr.start_date,
         end_date=rrr.end_date,
+
+        source_document_id=rrr.source_document_id,
+
         status=rrr.status,
+
+        priority=rrr.priority,
+
+        notes=rrr.notes,
         description=rrr.description
     )
+
 
     db.add(new_rrr)
     db.commit()
@@ -67,6 +112,16 @@ def create_rrr(
     return new_rrr
 
 
-@router.get("/", response_model=list[RRRResponse])
-def get_rrrs(db: Session = Depends(get_db)):
+# --------------------------------------------------
+# Get all RRR records
+# --------------------------------------------------
+
+@router.get(
+    "/",
+    response_model=list[RRRResponse]
+)
+def get_rrrs(
+    db: Session = Depends(get_db)
+):
+
     return db.query(RRR).all()

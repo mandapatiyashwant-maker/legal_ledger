@@ -21,23 +21,37 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=PartyResponse)
+@router.post(
+    "/",
+    response_model=PartyResponse
+)
 def create_party(
     party: PartyCreate,
     db: Session = Depends(get_db)
 ):
+
     new_party = Party(
         name=party.name,
-        party_type=party.party_type
+        party_type=party.party_type,
+        is_demo_record=party.is_demo_record,
+        demo_reference=party.demo_reference
     )
 
     db.add(new_party)
+
     db.commit()
+
     db.refresh(new_party)
 
     return new_party
 
 
-@router.get("/", response_model=list[PartyResponse])
-def get_parties(db: Session = Depends(get_db)):
+@router.get(
+    "/",
+    response_model=list[PartyResponse]
+)
+def get_parties(
+    db: Session = Depends(get_db)
+):
+
     return db.query(Party).all()
